@@ -8,17 +8,24 @@ var app = new Vue({
         user: [],
         count: 0,
         pointS: 0,
-        seenRestart: false
+        seenRestart: false,
+        nick: '',
+        counterUser: 0,
     },
-    mounted() {
-        this.tempx = 0;
-        this.tempy = 0;
-        this.startTimer();
-    },
+    // mounted() {
+    //     this.tempx = 0;
+    //     this.tempy = 0;
+    //     this.startTimer();
+    // },
     destroyed() {
         this.stopTimer()
     },
     methods: {
+        startGame() {
+            this.tempx = 0;
+            this.tempy = 0;
+            this.startTimer();
+        },
         startTimer() {
             this.timer = setInterval(() => {
                 this.currentTime--;
@@ -55,10 +62,18 @@ var app = new Vue({
             console.log(this.fish);
             clearTimeout(this.timer);
             clearTimeout(this.timerFish);
-            this.user.push({userPoints: this.pointS});
+            // this.user.push({userPoints: this.pointS});
+            Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
+            this.counterUser++;
             this.fish = [];
             this.pointS = 0;
             this.seenRestart = true;
+        },
+        restart() {
+            this.currentTime = 10;
+            this.fish = [];
+            this.count = 0;
+            this.seenRestart = false;
         },
         delFish(i) {
             // this.fish.splice(i, 1)
@@ -66,15 +81,9 @@ var app = new Vue({
             console.log(this.fish);
             console.log(this.fish[i]);
             this.pointS += this.fish[i].point;
-            Vue.set(this.fish, i, {seens: false});
+            // Vue.set(this.fish, i, {seens: false});
+            Vue.delete(this.fish, i);
 
-        },
-        restart() {
-            this.currentTime = 10;
-            this.startTimer();
-            this.fish = [];
-            this.count = 0;
-            this.seenRestart = false;
         },
         randomRotate(i) {
 
@@ -117,4 +126,5 @@ var app = new Vue({
             }
         }
     },
-})
+});
+
