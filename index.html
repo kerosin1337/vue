@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+    <script defer src="js/main.js"></script>
+</head>
+<body>
+<div class="app-2" v-if="seen">
+    <span v-bind:title="message">
+        {{massage2}}
+    </span>
+    <button v-on:click="reverseText">qwe</button>
+</div>
+
+<div class="for">
+    <ol>
+        <todo-item v-for="item in texts" v-bind:todo="item" v-bind:key="item.id">
+
+        </todo-item><button v-on:click="reverseTex2t"></button>
+    </ol>
+</div>
+
+<div class="input">
+    <p>
+        {{massage}}
+    </p>
+    <input type="text" v-model="massage">
+</div>
+</body>
+</html>
