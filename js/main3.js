@@ -81,8 +81,8 @@ var app = new Vue({
             console.log(this.fish);
             console.log(this.fish[i]);
             this.pointS += this.fish[i].point;
-            // Vue.set(this.fish, i, {seens: false});
-            Vue.delete(this.fish, i);
+            Vue.set(this.fish, i, {seens: false});
+            // Vue.delete(this.fish, i);
 
         },
         randomRotate(i) {
