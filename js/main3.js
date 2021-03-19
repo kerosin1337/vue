@@ -1,7 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        currentTime: 1,
+        currentTime: 10,
         timer: null,
         timerFish: null,
         fish: [],
@@ -22,14 +22,14 @@ var app = new Vue({
     },
     methods: {
         startGame() {
-            this.tempx = 0;
-            this.tempy = 0;
+            this.tempx = [];
+            this.tempy = [];
             this.startTimer();
         },
         startTimer() {
-            this.timer = setInterval(() => {
-                this.currentTime--;
-            }, 1000);
+            // this.timer = setInterval(() => {
+            //     this.currentTime--;
+            // }, 1000);
             this.timerFish = setInterval(() => {
                 if (this.count % 5 === 0 && this.count !== 0) {
                     this.fish.push({
@@ -52,14 +52,15 @@ var app = new Vue({
                         image: 'img/100.png',
                         point: 100
                     });
+                    this.tempx.push(0);
+                    this.tempy.push(0);
                 }
-
-
-                ++this.count;
+                this.count++;
+                this.currentTime--;
             }, 1000)
         },
         stopTimer() {
-            clearTimeout(this.timer);
+            // clearTimeout(this.timer);
             clearTimeout(this.timerFish);
             // this.user.push({userPoints: this.pointS});
             Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
@@ -77,7 +78,7 @@ var app = new Vue({
             this.nick = '';
         },
         repeatGame() {
-            this.currentTime = 1;
+            this.currentTime = 10;
             this.fish = [];
             this.count = 0;
             this.seenRestart = false;
@@ -88,9 +89,9 @@ var app = new Vue({
             // console.log(this.fish);
             // console.log(this.fish[i]);
             this.pointS += this.fish[i].point;
-            // Vue.set(this.fish, i, {seens: false});
+            Vue.set(this.fish, i, {seens: false});
             // Vue.delete(this.fish, i);
-            this.fish.splice(i, 1, {});
+            // this.fish.splice(i, 1, {});
 
         },
         randomRotate(i) {
@@ -101,28 +102,28 @@ var app = new Vue({
             this.y1 = this.y;
             this.x1 = this.x;
 
-            if (this.x <= this.tempx && this.y <= this.tempy) {
+            if (this.x <= this.tempx[i] && this.y <= this.tempy[i]) {
                 this.x1 = -this.x;
                 this.scY = '-1, 1';
-            } else if (this.x >= this.tempx && this.y >= this.tempy) {
+            } else if (this.x >= this.tempx[i] && this.y >= this.tempy[i]) {
                 this.x1 = -this.x;
                 this.y1 = -this.y;
                 this.scY = '1';
-            } else if (this.x >= this.tempx && this.y <= this.tempy) {
+            } else if (this.x >= this.tempx[i] && this.y <= this.tempy[i]) {
                 this.x1 = this.x;
                 this.y1 = this.y;
                 this.scY = '1';
-            } else if (this.x <= this.tempx && this.y >= this.tempy) {
+            } else if (this.x <= this.tempx[i] && this.y >= this.tempy[i]) {
                 this.y1 = -this.y;
                 this.scY = '-1, 1';
             }
-            this.tempx = this.x;
-            this.tempy = this.y;
+            this.tempx[i] = this.x;
+            this.tempy[i] = this.y;
 
             return {
                 left: this.x + 'px',
                 top: this.y + 'px',
-                transition: '5s',
+                transition: '3s',
                 transform: 'rotate(' + (Math.atan(this.y1 / this.x1) * 180) / Math.PI + 'deg) scale(' + this.scY + ')',
             }
         },
@@ -137,4 +138,6 @@ var app = new Vue({
 });
 
 
-var sortByPrice = function (d1, d2) { return (d1.userPoints < d2.userPoints) ? 1 : -1; };
+var sortByPrice = function (d1, d2) {
+    return (d1.userPoints < d2.userPoints) ? 1 : -1;
+};

@@ -105,8 +105,8 @@
 
     <div id="field" class="three" v-if="seen">
         <div v-for="(item,index) in field">
-            <div v-on:click="touch(index)" class="border border-dark">
-                <div v-show="item !== 0">
+            <div v-on:click="touch(index)" class="border border-dark d-flex justify-content-center">
+                <div v-show="item !== 0" class="align-self-center">
                     {{ item }}
                 </div>
             </div>
@@ -122,8 +122,8 @@
 
     <div id="field2" class="four" v-if="seen">
         <div v-for="(item,index) in field">
-            <div v-on:click="touch(index)" class="border border-dark">
-                <div v-show="item !== 0">
+            <div v-on:click="touch(index)" class="border border-dark d-flex justify-content-center">
+                <div v-show="item !== 0" class="align-self-center">
                     {{ item }}
                 </div>
             </div>

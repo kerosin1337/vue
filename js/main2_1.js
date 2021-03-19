@@ -297,6 +297,7 @@ var clean = new Vue({
                 game2.seen = false;
             }
             select.seen = true;
+            inputNick.seen_2 = false;
             nicks.seen = false;
             this.seen = false
         }

@@ -25,6 +25,16 @@
         .fishC {
             display: inline;
         }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */
+        {
+            opacity: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -35,10 +45,12 @@
     <div class="d-flex justify-content-evenly">
         <div style="width: 1024px;">
             <div class="containers p-0">
+                <transition-group name="fade">
 
-                <img :src="item.image" class="fish" v-for="(item, i) in fish" class="fishC" v-if="item.seens"
-                     v-on:click="delFish(i)"
-                     :style="randomRotate(i)">
+                    <img :src="item.image" class="fish" :key="i" v-for="(item, i) in fish" v-if="item.seens"
+                         v-on:click="delFish(i)"
+                         :style="randomRotate(i)">
+                </transition-group>
 
             </div>
             <div class="text-center">
@@ -49,6 +61,7 @@
                 </button>
             </div>
         </div>
+
         <table class="table table-striped" style="width: 30%;">
             <thead>
             <tr>
@@ -58,7 +71,8 @@
             </tr>
             </thead>
             <tr v-for="(item, i) in user.slice(0, 10)">
-                <th scope="row">{{i+1}}</th>
+
+                <th scope="row">{{i + 1}}</th>
                 <td>
                     {{item.name}}
 
