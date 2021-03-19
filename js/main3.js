@@ -76,13 +76,13 @@ var app = new Vue({
             this.seenRestart = false;
         },
         delFish(i) {
-            // this.fish.splice(i, 1)
-            console.log(i);
-            console.log(this.fish);
-            console.log(this.fish[i]);
+            // console.log(i);
+            // console.log(this.fish);
+            // console.log(this.fish[i]);
             this.pointS += this.fish[i].point;
-            Vue.set(this.fish, i, {seens: false});
+            // Vue.set(this.fish, i, {seens: false});
             // Vue.delete(this.fish, i);
+            this.fish.splice(i, 1, {});
 
         },
         randomRotate(i) {
@@ -117,14 +117,18 @@ var app = new Vue({
                 transition: '5s',
                 transform: 'rotate(' + (Math.atan(this.y1 / this.x1) * 180) / Math.PI + 'deg) scale(' + this.scY + ')',
             }
-        }
+        },
+        // sort() {
+        //         return this.user.sort(sortByPrice);
+        // }
     },
     watch: {
         currentTime(time) {
             if (time === 0) {
-                this.stopTimer()
+                this.stopTimer();
             }
         }
     },
 });
+
 
