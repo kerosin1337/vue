@@ -1,7 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        currentTime: 10,
+        currentTime: 1,
         timer: null,
         timerFish: null,
         fish: [],
@@ -59,21 +59,29 @@ var app = new Vue({
             }, 1000)
         },
         stopTimer() {
-            console.log(this.fish);
             clearTimeout(this.timer);
             clearTimeout(this.timerFish);
             // this.user.push({userPoints: this.pointS});
             Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
+            this.user = this.user.sort(sortByPrice);
             this.counterUser++;
             this.fish = [];
             this.pointS = 0;
             this.seenRestart = true;
         },
         restart() {
-            this.currentTime = 10;
+            this.currentTime = 1;
             this.fish = [];
             this.count = 0;
             this.seenRestart = false;
+            this.nick = '';
+        },
+        repeatGame() {
+            this.currentTime = 1;
+            this.fish = [];
+            this.count = 0;
+            this.seenRestart = false;
+            this.startGame();
         },
         delFish(i) {
             // console.log(i);
@@ -118,9 +126,6 @@ var app = new Vue({
                 transform: 'rotate(' + (Math.atan(this.y1 / this.x1) * 180) / Math.PI + 'deg) scale(' + this.scY + ')',
             }
         },
-        // sort() {
-        //         return this.user.sort(sortByPrice);
-        // }
     },
     watch: {
         currentTime(time) {
@@ -132,3 +137,4 @@ var app = new Vue({
 });
 
 
+var sortByPrice = function (d1, d2) { return (d1.userPoints < d2.userPoints) ? 1 : -1; };
