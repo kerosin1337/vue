@@ -24,7 +24,6 @@
     </style>
 </head>
 <body class="bg-secondary">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
 
 <div id="create">
     <div class="container shadow-lg p-0 bg-white rounded mb-3">
@@ -34,27 +33,32 @@
             <button type="submit" class="btn btn-primary btn-sm" @click="addNotebook()">Добавить</button>
         </div>
     </div>
-    <transition-group name="list">
-        <div v-for="(i, item) in notebook" :key="item" class="container mt-5 bg-white p-0" :style="border(i)"
-             v-if="1==1">
-            <div class="d-flex justify-content-between pl-2">
-                <span>{{i.title}}</span>
-                <div>
-                    <button></button>
-                    <button></button>
-                    <button data-clipboard-text="fat-delete"></button>
+    <div class="container">
+        <div class="row justify-content-sm-around">
+<!--            <transition-group name="list" tag="div" class="col-sm">-->
+                <div v-for="(i, item) in notebook" :key="item" class="col-md-5 mb-4 bg-white p-0"
+                     :style="border(i)"
+                     v-if="1==1">
+                    <div class="d-flex justify-content-between">
+                        <span>{{i.title}}</span>
+                        <div>
+                            <button></button>
+                            <button></button>
+                            <button data-clipboard-text="fat-delete"></button>
+                        </div>
+                    </div>
+                    <div class="d-flex" v-for="lists in i.list">
+                        <div class="d-inline-block border">
+                            <input type="checkbox" class=" m-2">
+                        </div>
+                        <div class="w-100 border">
+                            {{lists.li}}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex" v-for="lists in i.list">
-                <div class="d-inline-block border">
-                    <input type="checkbox" class="m-2">
-                </div>
-                <div class="w-100 border">
-                    {{lists.li}}
-                </div>
-            </div>
+<!--            </transition-group>-->
         </div>
-    </transition-group>
+    </div>
 </div>
 
 

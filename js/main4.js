@@ -13,7 +13,7 @@ var add = new Vue({
     },
     methods: {
         addNotebook() {
-            this.notebook.push({title: this.name, color: this.colorBlock, list: []});
+            this.notebook.push({title: this.name, color: this.colorBlock, list: [{li: 'qwe'}]});
 
         },
         border(i) {
