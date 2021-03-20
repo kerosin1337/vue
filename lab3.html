@@ -19,11 +19,8 @@
             background: url("img/back.jpg");
             width: 1024px;
             height: 570px;
-            display: inline-block;
-        }
+            display: block;
 
-        .fishC {
-            display: inline;
         }
 
         .fade-enter-active, .fade-leave-active {
@@ -35,25 +32,24 @@
             opacity: 0;
         }
 
+
     </style>
 </head>
-<body>
+<body style="overflow-x: hidden">
 
 
 <div id="app" class=" pt-4">
-    <h4 class="text-center">{{currentTime}}</h4>
+    <h4 class="text-center" :style="timerStyle()">{{currentTime}}</h4>
     <div class="d-flex justify-content-evenly">
         <div style="width: 1024px;">
             <div class="containers p-0">
-                <transition-group name="fade">
 
-                    <img :src="item.image" class="fish" :key="i" v-for="(item, i) in fish" v-if="item.seens"
-                         v-on:click="delFish(i)"
-                         :style="randomRotate(i)">
-                </transition-group>
+                <img :src="item.image" class="fish" :key="i" v-for="(item, i) in fish" v-if="item.seens"
+                     v-on:click="delFish(i)"
+                     :style="randomRotate(i)">
 
             </div>
-            <div class="text-center">
+            <div class="text-center mt-3">
                 <button v-on:click="restart" v-if="seenRestart" class="btn btn-warning" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">Рестарт
                 </button>
@@ -71,16 +67,18 @@
             </tr>
             </thead>
             <tr v-for="(item, i) in user.slice(0, 10)">
+                <transition name="fade">
 
-                <th scope="row">{{i + 1}}</th>
-                <td>
-                    {{item.name}}
+                    <th scope="row">{{i + 1}}</th>
+                    <td>
+                        {{item.name}}
 
-                </td>
-                <td>
-                    {{item.userPoints}}
+                    </td>
+                    <td>
+                        {{item.userPoints}}
 
-                </td>
+                    </td>
+                </transition>
             </tr>
         </table>
     </div>
@@ -97,13 +95,16 @@
                     <div class="modal-body">
                         <input type="text" class="form-control" v-model="nick">
                     </div>
-                    <div class="modal-footer pt-2 pb-2">
-                        <button type="submit" v-if="nick !== ''" class="btn btn-success" data-bs-dismiss="modal"
-                                @click="startGame()">
-                            Начать
-                        </button>
-                    </div>
+                    <transition name="fade">
+                        <div class="modal-footer pt-2 pb-2" v-if="nick !== ''">
 
+                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                                    @click="startGame()">
+                                Начать
+                            </button>
+
+                        </div>
+                    </transition>
                 </form>
             </div>
         </div>

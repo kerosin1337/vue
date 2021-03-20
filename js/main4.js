@@ -3,23 +3,28 @@ var add = new Vue({
     data: {
         notebook: [],
         name: '',
-        colorBlock: ''
+        colorBlock: '#3D7D96'
     },
     mounted() {
         if (localStorage.notebook) {
 
-            this.notebook = Array(localStorage.notebook);
-            console.log(this.notebook);
+            this.notebook = JSON.parse(localStorage.notebook);
         }
     },
     methods: {
         addNotebook() {
-            this.notebook.push({title: this.name, color: this.colorBlock})
+            this.notebook.push({title: this.name, color: this.colorBlock, list: []});
+
+        },
+        border(i) {
+            return {
+                'border-top': '5px solid ' + i.color,
+            }
         }
     },
     watch: {
-        name(UpNotebook) {
-            localStorage.notebook = UpNotebook;
+        notebook(UpNotebook) {
+            localStorage.notebook = JSON.stringify(UpNotebook);
         }
     }
 })

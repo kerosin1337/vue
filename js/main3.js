@@ -1,7 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        currentTime: 10,
+        currentTime: 15,
         timer: null,
         timerFish: null,
         fish: [],
@@ -12,11 +12,14 @@ var app = new Vue({
         nick: '',
         counterUser: 0,
     },
-    // mounted() {
-    //     this.tempx = 0;
-    //     this.tempy = 0;
-    //     this.startTimer();
-    // },
+    mounted() {
+        // this.tempx = 0;
+        // this.tempy = 0;
+        // this.startTimer();
+        if (localStorage.user) {
+            this.user = JSON.parse(localStorage.user);
+        }
+    },
     destroyed() {
         this.stopTimer()
     },
@@ -60,25 +63,23 @@ var app = new Vue({
             }, 1000)
         },
         stopTimer() {
+            this.currentTime = 15;
             // clearTimeout(this.timer);
             clearTimeout(this.timerFish);
             // this.user.push({userPoints: this.pointS});
-            Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
+            console.log(this.user, 34);
             this.user = this.user.sort(sortByPrice);
-            this.counterUser++;
             this.fish = [];
             this.pointS = 0;
             this.seenRestart = true;
         },
         restart() {
-            this.currentTime = 1;
             this.fish = [];
             this.count = 0;
             this.seenRestart = false;
             this.nick = '';
         },
         repeatGame() {
-            this.currentTime = 10;
             this.fish = [];
             this.count = 0;
             this.seenRestart = false;
@@ -89,7 +90,8 @@ var app = new Vue({
             // console.log(this.fish);
             // console.log(this.fish[i]);
             this.pointS += this.fish[i].point;
-            Vue.set(this.fish, i, {seens: false});
+
+            Vue.set(this.fish, i, {image: ''});
             // Vue.delete(this.fish, i);
             // this.fish.splice(i, 1, {});
 
@@ -123,16 +125,38 @@ var app = new Vue({
             return {
                 left: this.x + 'px',
                 top: this.y + 'px',
-                transition: '3s',
+                transition: '5s',
                 transform: 'rotate(' + (Math.atan(this.y1 / this.x1) * 180) / Math.PI + 'deg) scale(' + this.scY + ')',
             }
         },
+        timerStyle() {
+            if (this.currentTime <= 10) {
+                if (this.currentTime % 2 === 0) {
+                    return {
+                        color: 'red',
+                        transition: '1s',
+                        transform: 'scale(2)',
+                    }
+                } else {
+                    return {
+                        color: '#ff4800',
+                        transition: '1s',
+                        transform: 'scale(1)',
+                    }
+                }
+            }
+        }
     },
     watch: {
         currentTime(time) {
             if (time === 0) {
                 this.stopTimer();
+                Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
+                this.counterUser++;
             }
+        },
+        user(users) {
+            localStorage.user = JSON.stringify(users);
         }
     },
 });

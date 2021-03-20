@@ -6,18 +6,56 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="css/argon-design-system.min.css">
+    <style>
+        .list-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .list-enter-active, .list-leave-active {
+            transition: all 1s;
+        }
+
+        .list-enter, .list-leave-to /* .list-leave-active до версии 2.1.8 */
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-secondary">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
 
-<div class="container shadow-lg p-0 bg-white rounded mb-3" id="create">
-    <div class="d-flex justify-content-around p-3 bg-secondary border border-secondary rounded-3">
-        <input type="text" class="form-control w-50" placeholder="Блокнот" v-model="name">
-        <input type="color" class="form-control form-control-color" value="#3D7D96" v-model="colorBlock">
-        <button type="submit" class="btn btn-primary" @click="addNotebook()">Добавить</button>
+<div id="create">
+    <div class="container shadow-lg p-0 bg-white rounded mb-3">
+        <div class="d-flex justify-content-around p-3 bg-secondary border border-secondary rounded-3">
+            <input type="text" class="form-control w-50" placeholder="Блокнот" v-model="name">
+            <input type="color" class="form-control form-control-color" value="#3D7D96" v-model="colorBlock">
+            <button type="submit" class="btn btn-primary btn-sm" @click="addNotebook()">Добавить</button>
+        </div>
     </div>
-    <div v-for="i in notebook">{{i}}</div>
+    <transition-group name="list">
+        <div v-for="(i, item) in notebook" :key="item" class="container mt-5 bg-white p-0" :style="border(i)"
+             v-if="1==1">
+            <div class="d-flex justify-content-between pl-2">
+                <span>{{i.title}}</span>
+                <div>
+                    <button></button>
+                    <button></button>
+                    <button data-clipboard-text="fat-delete"></button>
+                </div>
+            </div>
+            <div class="d-flex" v-for="lists in i.list">
+                <div class="d-inline-block border">
+                    <input type="checkbox" class="m-2">
+                </div>
+                <div class="w-100 border">
+                    {{lists.li}}
+                </div>
+            </div>
+        </div>
+    </transition-group>
 </div>
-
 
 
 <script src="js/vue.js"></script>
