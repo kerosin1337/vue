@@ -125,7 +125,7 @@ var app = new Vue({
             return {
                 left: this.x + 'px',
                 top: this.y + 'px',
-                transition: '5s',
+                transition: '1s',
                 transform: 'rotate(' + (Math.atan(this.y1 / this.x1) * 180) / Math.PI + 'deg) scale(' + this.scY + ')',
             }
         },
@@ -150,9 +150,9 @@ var app = new Vue({
     watch: {
         currentTime(time) {
             if (time === 0) {
-                this.stopTimer();
                 Vue.set(this.user, this.counterUser, {name: this.nick, userPoints: this.pointS});
                 this.counterUser++;
+                this.stopTimer();
             }
         },
         user(users) {
