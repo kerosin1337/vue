@@ -23,9 +23,6 @@ var add = new Vue({
         if (localStorage.notebook) {
             this.notebook = JSON.parse(localStorage.notebook);
         }
-        if (localStorage.id) {
-            this.id = JSON.parse(localStorage.id);
-        }
         if (localStorage.form) {
             this.form = JSON.parse(localStorage.form);
         }
@@ -130,8 +127,8 @@ var add = new Vue({
             this.saveNotes()
         },
         updateNoteName(i, event) {
-            console.log(event);
-            this.notebook[i].title = event;
+            console.log(event, i);
+            i.title = event;
             this.saveNotes()
         },
         priorityUpdate(event, i) {
@@ -143,7 +140,6 @@ var add = new Vue({
             // this.notesFilter();
             Store.set('notebook', this.notebook);
             Store.set('form', this.form);
-            Store.set('id', this.id);
         },
     },
     watch: {
