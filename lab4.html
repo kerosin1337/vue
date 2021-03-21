@@ -41,8 +41,9 @@
 <div id="create">
     <div class="container shadow-lg p-0 bg-white rounded mb-3">
         <div class="d-flex justify-content-around p-3 bg-secondary border border-secondary rounded-3">
+            <input type="text" class="form-control" style="width: 10%" placeholder="Поиск" v-model="search">
             <div class="dropdown">
-                <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton1"
+                <button class="btn btn-icon dropdown-toggle pl-2 pr-2" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-funnel"></i>
                 </button>
@@ -99,9 +100,6 @@
                                    v-model="lists.completed" @change="updateCompleted(item, j, lists.completed)">
                         </div>
                         <div class="w-100 border d-flex">
-                            <!--                            <span :style="cross[j]">-->
-                            <!--                            {{lists.li}}-->
-                            <!--                            </span>-->
                             <input type="text" placeholder="Введите название дела" v-model="lists.li"
                                    class="form-control form-control-plaintext border-0"
                                    :style="{ textDecoration: lists.completed ? 'line-through' : 'none' }"

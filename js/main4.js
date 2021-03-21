@@ -16,22 +16,18 @@ var add = new Vue({
         id: 0,
         newColor: [],
         form: [],
-        filter: ''
+        filter: '',
+        search: '',
     },
     mounted() {
         if (localStorage.notebook) {
-
             this.notebook = JSON.parse(localStorage.notebook);
         }
         if (localStorage.id) {
-
             this.id = JSON.parse(localStorage.id);
         }
         if (localStorage.form) {
             this.form = JSON.parse(localStorage.form);
-        }
-        if (localStorage.cross) {
-            this.cross = JSON.parse(localStorage.cross);
         }
         if (localStorage.filter) {
             this.filter = JSON.parse(localStorage.filter);
@@ -60,14 +56,16 @@ var add = new Vue({
                 'priority': (a, b) => {
                     const priorityA = a.priority, prioritB = b.priority;
                     if (priorityA < prioritB)
-                        return -1
-                    if (priorityA > prioritB)
                         return 1
+                    if (priorityA > prioritB)
+                        return -1
                     return 0
                 }
             };
             // .filter(item => this.search ? item.title.includes(this.search) : true)
-            return this.notebook.sort(sortRules[this.filter]);
+            return this.notebook
+                .filter(item => this.search ? item.title.includes(this.search) : true)
+                .sort(sortRules[this.filter]);
         }
     },
     methods: {
@@ -87,6 +85,7 @@ var add = new Vue({
                 list: []
             });
             this.saveNotes();
+            this.name = ''
         },
         border(i) {
             return {
@@ -145,7 +144,6 @@ var add = new Vue({
             Store.set('notebook', this.notebook);
             Store.set('form', this.form);
             Store.set('id', this.id);
-            Store.set('cross', this.cross);
         },
     },
     watch: {
