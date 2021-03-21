@@ -7,6 +7,8 @@
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/argon-design-system.min.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
     <style>
         .list-item {
             display: inline-block;
@@ -22,6 +24,16 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
+        * {
+            transition: ease 1s;
+        }
+
+        input:active, input:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border: solid #cad1d7 !important;
+        }
     </style>
 </head>
 <body class="bg-secondary">
@@ -29,54 +41,103 @@
 <div id="create">
     <div class="container shadow-lg p-0 bg-white rounded mb-3">
         <div class="d-flex justify-content-around p-3 bg-secondary border border-secondary rounded-3">
+            <div class="dropdown">
+                <button class="btn btn-icon dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'date' }"
+                           @click="filter = 'date'">Дата</a>
+                    </li>
+                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'title' }"
+                           @click="filter = 'title'">Название</a></li>
+                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'favorites' }"
+                           @click="filter = 'priority'">Приоритет</a></li>
+
+                </ul>
+            </div>
             <input type="text" class="form-control w-50" placeholder="Блокнот" v-model="name">
             <input type="color" class="form-control form-control-color" value="#3D7D96" v-model="colorBlock">
+
             <button type="submit" class="btn btn-primary btn-sm" @click="addNotebook()">Добавить</button>
+
         </div>
+
     </div>
     <div class="container">
-        <div class="row justify-content-sm-around">
-            <!--            <transition-group name="list" tag="div" class="col-sm">-->
-            <div v-for="(i, item) in notebook" :key="item" class="col-md-5 mb-4 bg-white p-0"
-                 :style="border(i)"
-                 v-if="1==1">
-                <div class="d-flex justify-content-between">
-                    <span>{{i.title}}</span>
+        <transition-group name="list" tag="div" class="row justify-content-sm-between">
+            <div v-for="(i, item) in filteredNotes" class="col-md-5 m-4 p-0"
+                 :style="border(i)" v-if="i" :key="item">
+
+                <div class="bg-white">
                     <div class="d-flex justify-content-between">
-                        <input type="color" class="form-control form-control-color mr-2" value="#3D7D96" v-model="i.color">
-                        <img src="img/bag-plus.svg" width="32" alt="" class="ml-2 mr-2">
-                        <img src="img/trash.svg" width="32" alt="" class="ml-2 mr-2" v-on:click="delLi(item)">
+                        <input type="text" placeholder="Введите название" @change="updateNoteName(item, i.title)"
+                               v-model="i.title" class="form-control form-control-plaintext">
+                        <div class="d-flex justify-content-between">
+                            <input type="color" class="form-control form-control-color mr-2" :value="i.color"
+                                   @change="changeColor($event, i)">
+                            <div class="btn-group">
+                                <button type="button" class="btn dropdown-toggle pl-2 pr-2" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="bi bi-star-half"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="p-1">
+                                        <input type="range" class="form-range" min="0" max="5" step="1"
+                                               :value="i.priority" @change="priorityUpdate($event, i)">
+                                    </li>
+                                </ul>
+                            </div>
+                            <img src="img/trash.svg" width="32" alt="" class="ml-2 mr-2" v-on:click="removeNote(i)">
+                        </div>
+                    </div>
+                    <div class="d-flex" v-for="(lists, j) in i.list">
+
+                        <div class="d-inline-block border">
+                            <input type="checkbox" id="check" class="m-2 form-check"
+                                   v-model="lists.completed" @change="updateCompleted(item, j, lists.completed)">
+                        </div>
+                        <div class="w-100 border d-flex">
+                            <!--                            <span :style="cross[j]">-->
+                            <!--                            {{lists.li}}-->
+                            <!--                            </span>-->
+                            <input type="text" placeholder="Введите название дела" v-model="lists.li"
+                                   class="form-control form-control-plaintext border-0"
+                                   :style="{ textDecoration: lists.completed ? 'line-through' : 'none' }"
+                                   :disabled="lists.completed" @change="updateLiText(item, j, lists.li)">
+                            <button class="btn btn-icon" @click="removeTask(lists, item)" :disabled="lists.completed">
+                                <i class="bi bi-trash"></i></button>
+
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="d-inline-block border">
+                            <input type="checkbox" class="form-check m-2" disabled>
+                        </div>
+                        <div class="w-100 form-check-label">
+                            <form class="d-flex border border-secondary" @submit.prevent="addTask(i, item)">
+                                <input type="text" placeholder="Введите название дела..."
+                                       class="form-control form-control-plaintext"
+                                       v-model="form[item].title">
+                            </form>
+                        </div>
+                    </div>
+                    <div class="">
+                        <p class="ml-3 text-muted" aria-placeholder="dawdw">{{ i.date }}</p>
                     </div>
                 </div>
-                <div class="d-flex" v-for="(lists, j) in i.list">
-                    <div class="d-inline-block border">
-                        <input type="checkbox" id="check" class="m-2" v-bind:value="lists.id" v-model="check">
-                    </div>
-                    <div class="w-100 border form-check-label">
-                        {{lists.li}}
-                    </div>
-                </div>
-                <div class="d-flex">
-                    <div class="d-inline-block border">
-                        <input type="checkbox"  class=" m-2">
-                    </div>
-                    <div class="w-100 form-check-label">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
+
+
             </div>
-            <!--            </transition-group>-->
-        </div>
-    </div>{{check}}
+        </transition-group>
+    </div>
 </div>
 
 
 <script src="js/vue.js"></script>
 <script src="js/main4.js"></script>
 <script src="js/argon-design-system.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"
         integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi"
         crossorigin="anonymous"></script>
