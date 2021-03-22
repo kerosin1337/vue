@@ -52,13 +52,15 @@
                     <i class="bi bi-funnel"></i>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'date' }"
-                           @click="filter = 'date'">Дата</a>
+                    <li><a class="dropdown-item text-darker"
+                           @click="filter = 'date'" :class="{ 'bg-gradient-gray': filter === 'date' }">Дата</a>
                     </li>
-                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'title' }"
-                           @click="filter = 'title'">Название</a></li>
-                    <li><a class="dropdown-item text-darker" :class="{ 'active': filter === 'favorites' }"
-                           @click="filter = 'priority'">Приоритет</a></li>
+                    <li><a class="dropdown-item text-darker"
+                           @click="filter = 'title'" :class="{ 'bg-gradient-gray': filter === 'title' }">Название</a>
+                    </li>
+                    <li><a class="dropdown-item text-darker"
+                           @click="filter = 'priority'"
+                           :class="{ 'bg-gradient-gray': filter === 'priority' }">Приоритет</a></li>
 
                 </ul>
             </div>
