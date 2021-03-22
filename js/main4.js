@@ -147,4 +147,4 @@ var add = new Vue({
             Store.set('filter', value);
         }
     }
-})
+});
